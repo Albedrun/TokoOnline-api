@@ -69,6 +69,42 @@ class AuthController extends Controller
         return response($response, 201);
     }
 
+    public function loginAdmin(Request $request)
+    {
+        $fields = $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string'
+        ]);
+
+        // Check email
+        $user = User::where('email', $fields['email'])->first();
+
+        // Check password
+        if (!$user || !Hash::check($fields['password'], $user->password)){
+            return response([
+                'message' => 'unauthorized'
+            ], 401);
+        }
+        
+        $token = $user->createToken('tokenku')->plainTextToken;
+
+        $response = [
+            'user' => $user,
+            'token' => $token      
+        ];
+
+        return response($response, 201);
+    }
+
+    public function logoutAdmin(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return [
+            'message' => 'Logged out'
+        ];
+    }
+
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();

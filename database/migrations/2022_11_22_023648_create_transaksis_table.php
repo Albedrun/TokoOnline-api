@@ -13,8 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('siswas', function (Blueprint $table) {
-            $table->id();
+        Schema::create('transaksis', function (Blueprint $table) {
+            $table->bigInteger('transaction_id')->unique()->primary();
+            $table->string('product_name');
+            $table->integer('payment_price');
+            $table->string('payment_result');
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('siswas');
+        Schema::dropIfExists('transaksis');
     }
 };

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\TransaksiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +23,18 @@ use App\Http\Controllers\AdminController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login_admin', [AuthController::class, 'loginAdmin']);
+ 
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('produk', ProdukController::class)->except('create', 'edit', 'destroy');
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout_admin', [AuthController::class, 'logoutAdmin']);
     Route::resource('admin', AdminController::class);
+    Route::post('transaksi', [TransaksiController::class, 'store']);
+    Route::put('transaksi/{id}', [TransaksiController::class, 'updateResult']);
+    Route::get('transaksi_result/{id}', [TransaksiController::class, 'showResult']);
+    Route::get('transaksi', [TransaksiController::class, 'index']);
+    Route::get('transaksi_result', [TransaksiController::class, 'indexResult']);
+    Route::get('transaksi/{id}', [TransaksiController::class, 'show']);
 });
